@@ -28,7 +28,6 @@ wss.on('connection', ws => {
 
   ws.on('message', function incoming(clientMessage) {
     clientMessage = JSON.parse(clientMessage);
-    console.log("message object:", clientMessage);
     const { username, content } = clientMessage;
 
     switch (clientMessage.type) {
@@ -40,7 +39,6 @@ wss.on('connection', ws => {
           content
         };
         wss.clients.forEach(function each(client) {
-          console.log(JSON.stringify(incomingMessage));
           client.send(JSON.stringify(incomingMessage));
         });
         break;
@@ -51,11 +49,11 @@ wss.on('connection', ws => {
           content
         };
         wss.clients.forEach(function each(client) {
-            console.log(JSON.stringify(incomingNotification));
             client.send(JSON.stringify(incomingNotification));
         });
+        break;
       default:
-        console.log('unknow message type');
+        console.log('unknown message type');
     }
   });
 });

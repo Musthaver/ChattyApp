@@ -44,7 +44,7 @@ class App extends Component {
         break;
 
       case "incomingNotification":
-        console.log(data);
+        this.setState({messages: [data, ...this.state.messages]});
         break;
 
       default:
