@@ -8,9 +8,11 @@ const PORT = 3001;
 
 // Create a new express server
 const server = express()
-   // Make the express server serve static assets (html, javascript, css) from the /public folder
+  // Make the express server serve static assets (html, javascript, css) from the /public folder
   .use(express.static('public'))
-  .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+  .listen(PORT, '0.0.0.0', 'localhost', () =>
+    console.log(`Listening on ${PORT}`)
+  );
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
@@ -18,25 +20,42 @@ const wss = new SocketServer({ server });
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
-wss.on('connection', (ws) => {
+wss.on('connection', ws => {
   console.log('Client connected');
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));
 
-  ws.on('message', function incoming(newMessage) {
-      newMessage = JSON.parse(newMessage);
-      console.log(`User ${newMessage.username} said ${newMessage.content}.`);
-      const {username, content} = newMessage;
-      const incomingMessage = {
+  ws.on('message', function incoming(clientMessage) {
+    clientMessage = JSON.parse(clientMessage);
+    console.log("message object:", clientMessage);
+    const { username, content } = clientMessage;
+
+    switch (clientMessage.type) {
+      case 'postMessage':
+        const incomingMessage = {
+          type: 'incomingMessage',
           id: uuidv4(),
-          username, 
-          content,
-      }
-      console.log(incomingMessage);
-    wss.clients.forEach(function each(client) {
-            console.log(JSON.stringify(incomingMessage));
-            client.send(JSON.stringify(incomingMessage));
-    }); 
+          username,
+          content
+        };
+        wss.clients.forEach(function each(client) {
+          console.log(JSON.stringify(incomingMessage));
+          client.send(JSON.stringify(incomingMessage));
+        });
+        break;
+      case 'postNotification':
+        const incomingNotification = {
+          type: 'incomingNotification',
+          id: uuidv4(),
+          content
+        };
+        wss.clients.forEach(function each(client) {
+            console.log(JSON.stringify(incomingNotification));
+            client.send(JSON.stringify(incomingNotification));
+        });
+      default:
+        console.log('unknow message type');
+    }
   });
 });
