@@ -24,7 +24,7 @@ class Chatbar extends Component {
         <input
           className='chatbar-username'
           placeholder='Your Name (Optional)'
-          defaultValue={this.props.currentUser}
+          defaultValue={this.props.currentUser.name}
         />
         <input
           className='chatbar-message'
