@@ -1,32 +1,35 @@
 import React, { Component } from 'react';
 
 class Chatbar extends Component {
+  //Setting local state for controlled input of message field
   constructor(props) {
     super(props);
-    this.state = {content: ''};
+    this.state = { content: '' };
   }
 
-messageChange = event => {
-  this.setState({content: event.target.value});
-}
+  //set local state to input value
+  messageChange = event => {
+    this.setState({ content: event.target.value });
+  };
 
-messageKeyDown = event => {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    this.props.addNewMessage(this.state.content);
-    this.setState({content: ''})
-  }
-}
+  //On KeyDown === Enter in message field, call buildNewMessage (in App.jsx) and clear the message content in local state
+  messageKeyDown = event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      this.props.buildNewMessage(this.state.content);
+      this.setState({ content: '' });
+    }
+  };
 
-userKeyDown = event => {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    const newUserName = event.target.value;
-    this.props.updateCurrentUser(newUserName);
-  }
-}
+  //On KeyDown === Enter in Name field, call updateCurrentUser (in App.jsx)
+  userKeyDown = event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      const newUserName = event.target.value;
+      this.props.updateCurrentUser(newUserName);
+    }
+  };
 
-  
   render() {
     return (
       <footer className='chatbar'>
