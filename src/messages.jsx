@@ -12,7 +12,7 @@ const Messages = ({messages}) => {
             </div> 
         : 
             <div className="message system"> 
-            {messageObj.content};
+            {messageObj.content}
             </div>        
     ));
     return (

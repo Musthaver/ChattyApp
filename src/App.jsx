@@ -47,6 +47,10 @@ class App extends Component {
         this.setState({messages: [data, ...this.state.messages]});
         break;
 
+      case "countUsers":
+        this.setState({userCount: data.size});
+        break;
+
       default:
         throw new Error("Unknown event type " + data.type);  
     }
