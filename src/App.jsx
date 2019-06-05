@@ -8,6 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {loading: true};
+    this.socket = new WebSocket('ws://localhost:3001');
   }
     
   componentDidMount() {
@@ -27,15 +28,23 @@ class App extends Component {
         }
       ]
     });
+    // this.socket.addEventListener('open', (event) => {
+    //   console.log("Connected to server");
+    // });
+    // const websocket = this.socket;
+    this.socket.onopen = function (event) {
+      console.log("Connected to server");
+    };
   }
 
   addNewMessage = inputMessage => {
     const newMessage = {
-      id: 789,
+      id: this.state.messages.length + 1,
       username: this.state.currentUser,
       content: inputMessage
     }
-    this.setState({messages: [newMessage, ...this.state.messages]});
+    this.socket.send(JSON.stringify(newMessage));
+    // this.setState({messages: [newMessage, ...this.state.messages]});
   }
 
   render() {
