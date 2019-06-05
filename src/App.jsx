@@ -39,16 +39,16 @@ class App extends Component {
     const data = JSON.parse(event.data);
 
     switch(data.type) {
+      case "countUsers":
+        this.setState({userCount: data.size});
+        break;
+
       case "incomingMessage":
         this.setState({messages: [data, ...this.state.messages]});
         break;
 
       case "incomingNotification":
         this.setState({messages: [data, ...this.state.messages]});
-        break;
-
-      case "countUsers":
-        this.setState({userCount: data.size});
         break;
 
       default:
@@ -78,7 +78,7 @@ class App extends Component {
     } else {
     return (
       <div>
-        <NavBar/>
+        <NavBar userCount={this.state.userCount}/>
         <Messages messages={this.state.messages}/>
         <ChatBar currentUser={this.state.currentUser} addNewMessage={this.addNewMessage} updateCurrentUser={this.updateCurrentUser}/>
     </div>
