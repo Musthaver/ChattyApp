@@ -2,7 +2,9 @@ ChattyApp
 =====================
 A real time chat app built with React, Babel and Webpack on the front-end. Uses Websockets, node.js, Express and uuid on the server-side. 
 
-##Screenshots
+## Screenshots
+
+!["Screenshot of two users chatting"](docs/Twochatscreens.png)
 
 ### Dependencies
 
