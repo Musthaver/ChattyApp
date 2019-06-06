@@ -48,13 +48,11 @@ class App extends Component {
         this.setState({ userCount: data.size });
         break;
       case 'clientInfo':
-        this.setState({currentUser: data});
-
+        this.setState({ currentUser: data });
       case 'incomingMessage':
       case 'incomingNotification':
         this.setState({ messages: [...this.state.messages, data] });
         break;
-
       default:
         throw new Error('Unknown event type ' + data.type);
     }

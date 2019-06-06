@@ -9,7 +9,7 @@ const Navbar = ({ userCount, currentUser }) => {
         </a>
       </div>
       <div>
-        <h3>Welcome {currentUser.name}</h3>
+        <h3>Welcome, {currentUser.name}</h3>
         <h3>{userCount} users online</h3>
       </div>
     </nav>
