@@ -17,20 +17,25 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
+//broadcast to all users helper function
+const broadcast = object => {
+    wss.clients.forEach(function each(client) {
+        client.send(JSON.stringify(object));
+    });
+}
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', ws => {
   console.log('Client connected');
 
-  //set countUsers on connection so can be referenced on connection close
-  let countUsers = { type: 'countUsers' };
-
-  //update the countUsers size from each connection before broadcasting it to all clients
-  wss.clients.forEach(function each(client) {
-    countUsers.size = wss.clients.size;
-    client.send(JSON.stringify(countUsers));
-  });
+  //declare countUsers on connection
+  let countUsers = { 
+      type: 'countUsers',
+      size: wss.clients.size
+     };
+  broadcast(countUsers);
 
   //when a message or notification is received by server, parse JSON, and handle by message type
   ws.on('message', function incoming(clientMessage) {
@@ -46,9 +51,7 @@ wss.on('connection', ws => {
           username,
           content
         };
-        wss.clients.forEach(function each(client) {
-          client.send(JSON.stringify(incomingMessage));
-        });
+        broadcast(incomingMessage);
         break;
 
       //for name changes, change message type to incomingNotification, create UUID for the message and broadcast it to all users
@@ -58,9 +61,7 @@ wss.on('connection', ws => {
           id: uuidv4(),
           content
         };
-        wss.clients.forEach(function each(client) {
-          client.send(JSON.stringify(incomingNotification));
-        });
+        broadcast(incomingNotification);
         break;
 
       default:
@@ -70,10 +71,8 @@ wss.on('connection', ws => {
 
   // When client closes the socket, update countUsers size and broadcast to all clients
   ws.on('close', () => {
-    wss.clients.forEach(function each(client) {
-      countUsers.size = wss.clients.size;
-      client.send(JSON.stringify(countUsers));
-    });
+    countUsers.size = wss.clients.size;
+    broadcast(countUsers);
     console.log('Client disconnected');
   });
 });
