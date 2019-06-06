@@ -24,11 +24,13 @@ const broadcast = object => {
     });
 }
 
+//function to assign the user with one of four colors
 const getColor = () => {
     const availableColors = ['#12706a', '#3541e6', '#9447ff', '#ff2bbc']
     return availableColors[Math.floor(Math.random() * availableColors.length)];
 }
 
+//Assign client info upon connection
 const connectClient = (client, numberOfClients) => {
     const clientInfo = {
         type: 'clientInfo',
@@ -36,7 +38,6 @@ const connectClient = (client, numberOfClients) => {
         name: `Anonymous${numberOfClients}`,
         color: getColor(),
     }
-    console.log(clientInfo);
     client.send(JSON.stringify(clientInfo));
 }
 
@@ -48,7 +49,7 @@ wss.on('connection', ws => {
 
   connectClient(ws, wss.clients.size);
 
-  //declare countUsers on connection
+  //declare countUsers on connection and broadcast it to all clients
   let countUsers = { 
       type: 'countUsers',
       size: wss.clients.size
