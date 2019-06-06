@@ -18,7 +18,8 @@ class App extends Component {
     const newMessage = {
       type: 'postMessage',
       username: this.state.currentUser.name,
-      content: inputMessage
+      content: inputMessage,
+      color: this.state.currentUser.color
     };
     this.socket.send(JSON.stringify(newMessage));
   };
@@ -29,10 +30,13 @@ class App extends Component {
       type: 'postNotification',
       content: `${this.state.currentUser.name} has changed their name to ${newUserName}`
     };
-    let newCurrentUser = { name: newUserName };
-    this.setState({ currentUser: newCurrentUser });
+    const newCurrentUser = Object.assign({}, this.state.currentUser)
+    newCurrentUser.name = newUserName;
+    this.setState({currentUser: newCurrentUser})
     this.socket.send(JSON.stringify(postNotification));
   };
+
+
 
   //function to handle messages from Websocket and update the state accordingly
   handleOnMessage = event => {
@@ -81,7 +85,7 @@ class App extends Component {
       return (
         <div>
           <NavBar userCount={this.state.userCount} currentUser={this.state.currentUser}/>
-          <Messages messages={this.state.messages} />
+          <Messages messages={this.state.messages}/>
           <ChatBar
             currentUser={this.state.currentUser}
             buildNewMessage={this.buildNewMessage}

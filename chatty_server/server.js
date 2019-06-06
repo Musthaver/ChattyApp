@@ -24,11 +24,17 @@ const broadcast = object => {
     });
 }
 
+const getColor = () => {
+    const availableColors = ['#12706a', '#3541e6', '#9447ff', '#ff2bbc']
+    return availableColors[Math.floor(Math.random() * availableColors.length)];
+}
+
 const connectClient = (client, numberOfClients) => {
     const clientInfo = {
         type: 'clientInfo',
         id: uuidv4(),
         name: `Anonymous${numberOfClients}`,
+        color: getColor(),
     }
     console.log(clientInfo);
     client.send(JSON.stringify(clientInfo));
@@ -52,7 +58,7 @@ wss.on('connection', ws => {
   //when a message or notification is received by server, parse JSON, and handle by message type
   ws.on('message', function incoming(clientMessage) {
     clientMessage = JSON.parse(clientMessage);
-    const { username, content } = clientMessage;
+    const { username, content, color } = clientMessage;
 
     switch (clientMessage.type) {
       //for messages, change message type to incomingMessage, create UUID for the message and broadcast it to all users
@@ -61,7 +67,8 @@ wss.on('connection', ws => {
           type: 'incomingMessage',
           id: uuidv4(),
           username,
-          content
+          content, 
+          color
         };
         broadcast(incomingMessage);
         break;
