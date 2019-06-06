@@ -24,11 +24,23 @@ const broadcast = object => {
     });
 }
 
+const connectClient = (client, numberOfClients) => {
+    const clientInfo = {
+        type: 'clientInfo',
+        id: uuidv4(),
+        name: `Anonymous${numberOfClients}`,
+    }
+    console.log(clientInfo);
+    client.send(JSON.stringify(clientInfo));
+}
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', ws => {
   console.log('Client connected');
+
+  connectClient(ws, wss.clients.size);
 
   //declare countUsers on connection
   let countUsers = { 

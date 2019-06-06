@@ -43,6 +43,8 @@ class App extends Component {
       case 'countUsers':
         this.setState({ userCount: data.size });
         break;
+      case 'clientInfo':
+        this.setState({currentUser: data});
 
       case 'incomingMessage':
       case 'incomingNotification':
@@ -78,7 +80,7 @@ class App extends Component {
     } else {
       return (
         <div>
-          <NavBar userCount={this.state.userCount} />
+          <NavBar userCount={this.state.userCount} currentUser={this.state.currentUser}/>
           <Messages messages={this.state.messages} />
           <ChatBar
             currentUser={this.state.currentUser}

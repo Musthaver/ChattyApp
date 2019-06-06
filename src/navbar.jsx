@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const Navbar = ({ userCount }) => {
+const Navbar = ({ userCount, currentUser }) => {
   return (
     <nav className='navbar'>
       <div>
@@ -9,7 +9,8 @@ const Navbar = ({ userCount }) => {
         </a>
       </div>
       <div>
-        <h2>{userCount} users online</h2>
+        <h3>Welcome {currentUser.name}</h3>
+        <h3>{userCount} users online</h3>
       </div>
     </nav>
   );
